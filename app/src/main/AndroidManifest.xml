@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.bnkt.f106024.staniterminator"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Need internet to get motivational quotes -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="Stani Terminator"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".WorkoutActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".WorkoutTimerService"
+            android:exported="false" />
+    </application>
+</manifest>

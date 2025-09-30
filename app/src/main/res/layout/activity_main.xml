@@ -11,7 +11,7 @@
         android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stani Terminator 💪"
+        android:text="Stani Terminator "
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_marginBottom="24dp"
@@ -42,7 +42,7 @@
         android:id="@+id/btnStrength"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="💪 Start Strength Workout"
+        android:text="Start Strength Workout"
         android:textSize="18sp"
         android:layout_marginBottom="16dp"
         android:padding="16dp" />
@@ -51,7 +51,7 @@
         android:id="@+id/btnHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="📊 View Workout History"
+        android:text="View Workout History"
         android:textSize="18sp"
         android:padding="16dp"
         android:backgroundTint="#4CAF50" />

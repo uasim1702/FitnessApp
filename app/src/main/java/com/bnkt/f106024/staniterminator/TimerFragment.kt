@@ -11,12 +11,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-// Fragment that shows the workout timer
 class TimerFragment : Fragment() {
 
     private lateinit var timerText: TextView
 
-    // Receiver to get timer updates from service
     private val timerReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (WorkoutState.isStopped || WorkoutState.isPaused) return
@@ -37,7 +35,6 @@ class TimerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // Register to receive timer updates
         requireActivity().registerReceiver(
             timerReceiver,
             IntentFilter("com.bnkt.f106024.TIMER_UPDATE"),
@@ -47,7 +44,6 @@ class TimerFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        // Stop receiving timer updates
         requireActivity().unregisterReceiver(timerReceiver)
     }
 }

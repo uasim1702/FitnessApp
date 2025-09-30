@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-// Fragment that shows current exercise and exercise list
 class ExerciseFragment : Fragment() {
 
     private lateinit var exerciseListLayout: LinearLayout
@@ -23,7 +22,6 @@ class ExerciseFragment : Fragment() {
     private val maxRounds = 5
     private lateinit var exercises: List<String>
 
-    // Updates exercise every 20 seconds
     private val exerciseUpdater = object : Runnable {
         override fun run() {
             if (WorkoutState.isStopped) {
@@ -45,14 +43,13 @@ class ExerciseFragment : Fragment() {
                 updateExerciseDisplay(exerciseIndex)
                 exerciseIndex++
             }
-            handler.postDelayed(this, 20_000) // Change exercise every 20 seconds
+            handler.postDelayed(this, 20_000)
         }
     }
 
     private fun updateExerciseDisplay(position: Int) {
         currentExerciseText.text = exercises[position]
 
-        // Highlight current exercise in list
         for (i in exercises.indices) {
             val exerciseView = exerciseListLayout.findViewWithTag<TextView>("exercise_$i")
             if (i == position) {
@@ -76,14 +73,12 @@ class ExerciseFragment : Fragment() {
         super.onResume()
         val workoutType = arguments?.getString("workout_type") ?: "Cardio"
 
-        // Define exercises for each workout type
         exercises = when (workoutType) {
             "Cardio" -> listOf("🏃 Jumping Jacks", "🤸 High Knees", "🧗 Mountain Climbers", "💥 Burpees")
             "Strength" -> listOf("💪 Push-ups", "🦵 Squats", "🧍 Plank")
             else -> listOf("🧘 Stretching")
         }
 
-        // Create exercise list view
         exerciseListLayout.removeAllViews()
         exercises.forEachIndexed { index, exerciseName ->
             val exerciseView = TextView(requireContext()).apply {

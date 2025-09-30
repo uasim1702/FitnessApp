@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-// Simple database to store completed workouts
 class WorkoutDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
@@ -63,7 +62,6 @@ class WorkoutDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 }
 
-// Simple data class to hold workout information
 data class WorkoutSession(
     val id: Int,
     val type: String,

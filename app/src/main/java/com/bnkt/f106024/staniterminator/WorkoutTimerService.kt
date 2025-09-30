@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-// Background service that counts seconds and sends updates
 class WorkoutTimerService : Service() {
 
     private var isRunning = false
@@ -20,7 +19,6 @@ class WorkoutTimerService : Service() {
                 if (WorkoutState.isStopped) break
 
                 if (!WorkoutState.isPaused) {
-                    // Send timer update to TimerFragment
                     val timerIntent = Intent("com.bnkt.f106024.TIMER_UPDATE")
                     timerIntent.setPackage(packageName)
                     timerIntent.putExtra("seconds", seconds)
@@ -28,7 +26,7 @@ class WorkoutTimerService : Service() {
                     seconds++
                 }
 
-                Thread.sleep(1000) // Wait 1 second
+                Thread.sleep(1000)
             }
             stopSelf()
         }

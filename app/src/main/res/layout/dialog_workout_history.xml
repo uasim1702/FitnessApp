@@ -9,7 +9,7 @@
         android:id="@+id/historyTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="📊 Your Workout History"
+        android:text="Your Workout History"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"

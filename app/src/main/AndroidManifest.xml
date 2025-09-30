@@ -2,7 +2,6 @@
 <manifest package="com.bnkt.f106024.staniterminator"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Need internet to get motivational quotes -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

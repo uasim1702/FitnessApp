@@ -7,7 +7,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-// Main screen - choose workout type and see motivational quote
 class MainActivity : AppCompatActivity() {
 
     private lateinit var database: WorkoutDatabase
@@ -18,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize database and quote service
         database = WorkoutDatabase(this)
         quoteService = ApiService()
 
@@ -28,12 +26,10 @@ class MainActivity : AppCompatActivity() {
         val historyButton = findViewById<Button>(R.id.btnHistory)
         motivationText = findViewById(R.id.motivationText)
 
-        // Set button click listeners
         cardioButton.setOnClickListener { startWorkout("Cardio") }
         strengthButton.setOnClickListener { startWorkout("Strength") }
         historyButton.setOnClickListener { showHistory() }
 
-        // Get motivational quote when app starts
         loadMotivationalQuote()
     }
 
@@ -95,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Load new quote when returning to main screen
         loadMotivationalQuote()
     }
 }

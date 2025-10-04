@@ -1,4 +1,3 @@
-bl
 # Stani Terminator
 
 This is a simple Android fitness app made with **Kotlin** for my university project.  
@@ -28,11 +27,3 @@ The goal was to show the main Android concepts in one application.
 2. Connect a device or emulator
 3. Run the app
 4. The app needs internet for the quotes
-
-## What this project shows
-- Using Activities and Intents
-- Using Fragments
-- Using a Service and background thread
-- Fetching data from the internet
-- Saving data with SQLite  
-

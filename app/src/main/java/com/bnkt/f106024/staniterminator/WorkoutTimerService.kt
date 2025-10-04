@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
+
 class WorkoutTimerService : Service() {
 
     private var isRunning = false
@@ -14,10 +15,8 @@ class WorkoutTimerService : Service() {
 
         timerThread = Thread {
             var seconds = 0
-
             while (isRunning) {
                 if (WorkoutState.isStopped) break
-
                 if (!WorkoutState.isPaused) {
                     val timerIntent = Intent("com.bnkt.f106024.TIMER_UPDATE")
                     timerIntent.setPackage(packageName)
@@ -25,8 +24,9 @@ class WorkoutTimerService : Service() {
                     sendBroadcast(timerIntent)
                     seconds++
                 }
-
-                Thread.sleep(1000)
+                try {
+                    Thread.sleep(1000)
+                } catch (_: InterruptedException) { break }
             }
             stopSelf()
         }
@@ -37,9 +37,7 @@ class WorkoutTimerService : Service() {
 
     override fun onDestroy() {
         isRunning = false
-        if (this::timerThread.isInitialized) {
-            timerThread.interrupt()
-        }
+        if (this::timerThread.isInitialized) timerThread.interrupt()
         super.onDestroy()
     }
 

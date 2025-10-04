@@ -48,7 +48,6 @@ class WorkoutDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val cursor = readableDatabase.query(
             TABLE_WORKOUTS, null, null, null, null, null, "$COLUMN_DATE DESC"
         )
-
         cursor.use {
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))

@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         database = WorkoutDatabase(this)
         quoteService = ApiService()
 
-        // Find all buttons and text views
         val cardioButton = findViewById<Button>(R.id.btnCardio)
         val strengthButton = findViewById<Button>(R.id.btnStrength)
         val historyButton = findViewById<Button>(R.id.btnHistory)
@@ -34,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startWorkout(workoutType: String) {
-        // Create intent to go to workout screen
         val intent = Intent(this, WorkoutActivity::class.java)
         intent.putExtra("workout_type", workoutType)
         startActivity(intent)
@@ -56,10 +54,8 @@ class MainActivity : AppCompatActivity() {
         val historyContent = dialogView.findViewById<TextView>(R.id.historyContent)
         val closeButton = dialogView.findViewById<Button>(R.id.btnCloseHistory)
 
-        // Build history text
         val historyText = StringBuilder()
         historyText.append("Total workouts: ${workouts.size}\n\n")
-
         workouts.take(10).forEachIndexed { index, workout ->
             val minutes = workout.durationSeconds / 60
             val seconds = workout.durationSeconds % 60
@@ -67,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                 .format(java.util.Date(workout.date.toLong()))
             historyText.append("${index + 1}. ${workout.type} - ${minutes}m ${seconds}s ($date)\n")
         }
-
         historyContent.text = historyText.toString()
 
         val alertDialog = dialog.setView(dialogView).create()
@@ -77,14 +72,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadMotivationalQuote() {
         motivationText.text = "Loading motivation..."
-
         quoteService.getRandomQuote(object : ApiService.QuoteCallback {
             override fun onQuoteReceived(quote: String, author: String) {
                 motivationText.text = "\"$quote\" — $author"
             }
-
             override fun onQuoteFailed(error: String) {
-                motivationText.text = "Stay motivated and keep exercising! 💪"
+                motivationText.text = "Stay motivated and keep exercising!"
             }
         })
     }

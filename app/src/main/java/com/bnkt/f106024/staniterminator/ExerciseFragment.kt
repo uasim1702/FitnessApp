@@ -17,52 +17,20 @@ class ExerciseFragment : Fragment() {
     private lateinit var currentExerciseText: TextView
 
     private val handler = Handler(Looper.getMainLooper())
-    private var exerciseIndex = 0
-    private var completedRounds = 0
-    private val maxRounds = 5
-    private lateinit var exercises: List<String>
+    private var currentIndex = 0
+    private var exercises: List<String> = emptyList()
 
-    private val exerciseUpdater = object : Runnable {
+    private val updater = object : Runnable {
         override fun run() {
-            if (WorkoutState.isStopped) {
-                exerciseIndex = 0
-                completedRounds = 0
-                updateExerciseDisplay(0)
-                return
-            }
-
-            if (!WorkoutState.isPaused) {
-                if (exerciseIndex >= exercises.size) {
-                    completedRounds++
-                    if (completedRounds >= maxRounds) {
-                        currentExerciseText.text = "🏁 Workout Complete!"
-                        return
-                    }
-                    exerciseIndex = 0
-                }
-                updateExerciseDisplay(exerciseIndex)
-                exerciseIndex++
-            }
-            handler.postDelayed(this, 20_000)
+            highlightExercise(currentIndex)
+            currentIndex = (currentIndex + 1) % exercises.size
+            handler.postDelayed(this, 30000)
         }
     }
 
-    private fun updateExerciseDisplay(position: Int) {
-        currentExerciseText.text = exercises[position]
-
-        for (i in exercises.indices) {
-            val exerciseView = exerciseListLayout.findViewWithTag<TextView>("exercise_$i")
-            if (i == position) {
-                exerciseView?.setTextColor(Color.WHITE)
-                exerciseView?.setBackgroundColor(Color.RED)
-            } else {
-                exerciseView?.setTextColor(Color.BLACK)
-                exerciseView?.setBackgroundColor(Color.WHITE)
-            }
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_exercise, container, false)
         currentExerciseText = view.findViewById(R.id.exerciseText)
         exerciseListLayout = requireActivity().findViewById(R.id.exerciseListLayout)
@@ -74,34 +42,52 @@ class ExerciseFragment : Fragment() {
         val workoutType = arguments?.getString("workout_type") ?: "Cardio"
 
         exercises = when (workoutType) {
-            "Cardio" -> listOf("🏃 Jumping Jacks", "🤸 High Knees", "🧗 Mountain Climbers", "💥 Burpees")
-            "Strength" -> listOf("💪 Push-ups", "🦵 Squats", "🧍 Plank")
-            else -> listOf("🧘 Stretching")
+            "Cardio" -> listOf("Jumping Jacks", "High Knees", "Mountain Climbers", "Burpees")
+            "Strength" -> listOf("Push-ups", "Squats", "Plank")
+            else -> listOf("Stretching")
         }
 
-        exerciseListLayout.removeAllViews()
-        exercises.forEachIndexed { index, exerciseName ->
-            val exerciseView = TextView(requireContext()).apply {
-                text = exerciseName
-                textSize = 18f
-                setPadding(20, 10, 20, 10)
-                setBackgroundColor(Color.WHITE)
-                setTextColor(Color.BLACK)
-                tag = "exercise_$index"
-            }
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { bottomMargin = 8 }
-            exerciseView.layoutParams = layoutParams
-            exerciseListLayout.addView(exerciseView)
-        }
-
-        handler.post(exerciseUpdater)
+        currentExerciseText.text = "$workoutType exercises"
+        buildExerciseList()
+        currentIndex = 0
+        handler.post(updater)
     }
 
     override fun onPause() {
         super.onPause()
-        handler.removeCallbacks(exerciseUpdater)
+        handler.removeCallbacks(updater)
+    }
+
+    private fun buildExerciseList() {
+        exerciseListLayout.removeAllViews()
+        exercises.forEachIndexed { index, name ->
+            val tv = TextView(requireContext()).apply {
+                text = "• $name"
+                textSize = 18f
+                setPadding(20, 14, 20, 14)
+                setTextColor(Color.BLACK)
+                setBackgroundColor(Color.WHITE)
+                tag = "exercise_$index"
+            }
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { bottomMargin = 8 }
+            tv.layoutParams = lp
+            exerciseListLayout.addView(tv)
+        }
+    }
+
+    private fun highlightExercise(position: Int) {
+        for (i in exercises.indices) {
+            val tv = exerciseListLayout.findViewWithTag<TextView>("exercise_$i")
+            if (i == position) {
+                tv?.setBackgroundColor(Color.RED)
+                tv?.setTextColor(Color.WHITE)
+            } else {
+                tv?.setBackgroundColor(Color.WHITE)
+                tv?.setTextColor(Color.BLACK)
+            }
+        }
     }
 }

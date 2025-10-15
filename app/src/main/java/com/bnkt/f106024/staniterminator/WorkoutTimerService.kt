@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-
 class WorkoutTimerService : Service() {
 
     private var isRunning = false
@@ -12,23 +11,21 @@ class WorkoutTimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
+        WorkoutState.seconds = 0
 
         timerThread = Thread {
-            var seconds = 0
-            while (isRunning) {
-                if (WorkoutState.isStopped) break
-                if (!WorkoutState.isPaused) {
-                    val timerIntent = Intent("com.bnkt.f106024.TIMER_UPDATE")
-                    timerIntent.setPackage(packageName)
-                    timerIntent.putExtra("seconds", seconds)
-                    sendBroadcast(timerIntent)
-                    seconds++
-                }
-                try {
+            try {
+                while (isRunning) {
+                    if (WorkoutState.isStopped) break
+                    if (!WorkoutState.isPaused) {
+                        WorkoutState.seconds += 1
+                    }
                     Thread.sleep(1000)
-                } catch (_: InterruptedException) { break }
+                }
+            } catch (_: InterruptedException) {
+            } finally {
+                stopSelf()
             }
-            stopSelf()
         }
         timerThread.start()
 

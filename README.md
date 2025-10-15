@@ -1,5 +1,12 @@
 # Stani Terminator
 
+## Screenshots
+<p align="center">
+  <img src="screenshots/mainActivity.png" width="250">
+  <img src="screenshots/WorkoutActivity.png" width="250">
+  <img src="screenshots/History.png" width="250">
+</p>
+
 This is a simple Android fitness app made with **Kotlin** for my university project.  
 The goal was to show the main Android concepts in one application.
 

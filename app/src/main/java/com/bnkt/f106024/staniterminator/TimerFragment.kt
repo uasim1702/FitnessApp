@@ -1,10 +1,8 @@
 package com.bnkt.f106024.staniterminator
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,19 +12,23 @@ import androidx.fragment.app.Fragment
 class TimerFragment : Fragment() {
 
     private lateinit var timerText: TextView
+    private val handler = Handler(Looper.getMainLooper())
 
-    private val timerReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (WorkoutState.isStopped || WorkoutState.isPaused) return
-
-            val seconds = intent?.getIntExtra("seconds", 0) ?: 0
-            val minutes = seconds / 60
-            val remainingSeconds = seconds % 60
-            timerText.text = String.format("Timer: %02d:%02d", minutes, remainingSeconds)
+    private val updater = object : Runnable {
+        override fun run() {
+            if (!WorkoutState.isStopped) {
+                val total = WorkoutState.seconds
+                val minutes = total / 60
+                val seconds = total % 60
+                timerText.text = String.format("Timer: %02d:%02d", minutes, seconds)
+            }
+            handler.postDelayed(this, 1000)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_timer, container, false)
         timerText = view.findViewById(R.id.timerText)
         timerText.text = "Timer: 00:00"
@@ -35,15 +37,11 @@ class TimerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().registerReceiver(
-            timerReceiver,
-            IntentFilter("com.bnkt.f106024.TIMER_UPDATE"),
-            Context.RECEIVER_NOT_EXPORTED
-        )
+        handler.post(updater)
     }
 
     override fun onPause() {
         super.onPause()
-        requireActivity().unregisterReceiver(timerReceiver)
+        handler.removeCallbacks(updater)
     }
 }

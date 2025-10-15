@@ -2,8 +2,7 @@ package com.bnkt.f106024.staniterminator
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +15,9 @@ class ExerciseFragment : Fragment() {
     private lateinit var exerciseListLayout: LinearLayout
     private lateinit var currentExerciseText: TextView
 
-    private val handler = Handler(Looper.getMainLooper())
     private var currentIndex = 0
     private var exercises: List<String> = emptyList()
-
-    private val updater = object : Runnable {
-        override fun run() {
-            highlightExercise(currentIndex)
-            currentIndex = (currentIndex + 1) % exercises.size
-            handler.postDelayed(this, 30000)
-        }
-    }
+    private var cycleTimer: CountDownTimer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -40,7 +31,6 @@ class ExerciseFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val workoutType = arguments?.getString("workout_type") ?: "Cardio"
-
         exercises = when (workoutType) {
             "Cardio" -> listOf("Jumping Jacks", "High Knees", "Mountain Climbers", "Burpees")
             "Strength" -> listOf("Push-ups", "Squats", "Plank")
@@ -50,12 +40,25 @@ class ExerciseFragment : Fragment() {
         currentExerciseText.text = "$workoutType exercises"
         buildExerciseList()
         currentIndex = 0
-        handler.post(updater)
+        startCycling()
     }
 
     override fun onPause() {
         super.onPause()
-        handler.removeCallbacks(updater)
+        cycleTimer?.cancel()
+        cycleTimer = null
+    }
+
+    private fun startCycling() {
+        if (exercises.isEmpty()) return
+        cycleTimer?.cancel()
+        cycleTimer = object : CountDownTimer(Long.MAX_VALUE, 30_000L) {
+            override fun onTick(millisUntilFinished: Long) {
+                highlightExercise(currentIndex)
+                currentIndex = (currentIndex + 1) % exercises.size
+            }
+            override fun onFinish() {}
+        }.start()
     }
 
     private fun buildExerciseList() {
@@ -77,7 +80,6 @@ class ExerciseFragment : Fragment() {
             exerciseListLayout.addView(tv)
         }
     }
-
     private fun highlightExercise(position: Int) {
         for (i in exercises.indices) {
             val tv = exerciseListLayout.findViewWithTag<TextView>("exercise_$i")

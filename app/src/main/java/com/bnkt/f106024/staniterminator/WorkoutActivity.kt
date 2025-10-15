@@ -66,7 +66,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         stopButton.setOnClickListener {
             if (!WorkoutState.isStopped) {
-                val durationSeconds = ((System.currentTimeMillis() - workoutStartTime) / 1000).toInt()
+                val durationSeconds = WorkoutState.seconds
                 if (durationSeconds > 0) {
                     database.saveWorkout(workoutType, durationSeconds)
                     val minutes = durationSeconds / 60
@@ -81,7 +81,7 @@ class WorkoutActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (!WorkoutState.isStopped) {
-            val durationSeconds = ((System.currentTimeMillis() - workoutStartTime) / 1000).toInt()
+            val durationSeconds = WorkoutState.seconds
             if (durationSeconds > 0) {
                 database.saveWorkout(workoutType, durationSeconds)
             }

@@ -5,11 +5,9 @@ import android.os.Looper
 import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.Executors
 
 class ApiService {
 
-    private val backgroundWorker = Executors.newSingleThreadExecutor()
     private val uiHandler = Handler(Looper.getMainLooper())
 
     interface QuoteCallback {
@@ -18,7 +16,7 @@ class ApiService {
     }
 
     fun getRandomQuote(callback: QuoteCallback) {
-        backgroundWorker.execute {
+        Thread {
             try {
                 val url = URL("https://zenquotes.io/api/random")
                 val connection = url.openConnection() as HttpURLConnection
@@ -35,9 +33,9 @@ class ApiService {
                 val author = json.getString("a")
 
                 uiHandler.post { callback.onQuoteReceived(quote, author) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 uiHandler.post { callback.onQuoteFailed("Network error") }
             }
-        }
+        }.start()
     }
 }

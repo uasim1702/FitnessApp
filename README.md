@@ -2,9 +2,9 @@
 
 ## Screenshots
 <p align="center">
-  <img src="screenshots/mainActivity.png" width="250">
-  <img src="screenshots/WorkoutActivity.png" width="250">
-  <img src="screenshots/History.png" width="250">
+  <img src="screenshots/mainActivity.png" width="250" align="top">
+  <img src="screenshots/WorkoutActivity.png" width="250" align="top">
+  <img src="screenshots/History.png" width="250" align="top">
 </p>
 
 This is a simple Android fitness app made with **Kotlin** for my university project.  

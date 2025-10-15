@@ -2,35 +2,38 @@
 
 ## Screenshots
 <p align="center">
-  <img src="screenshots/mainActivity.png" width="250" height="500" align="top">
-  <img src="screenshots/WorkoutActivity.png" width="250" height="500" align="top">
-  <img src="screenshots/History.png" width="250" height="500" align="top">
+  <img src="screenshots/mainActivity.png" height="500" align="top">
+  <img src="screenshots/WorkoutActivity.png" height="500" align="top">
+  <img src="screenshots/History.png" height="500" align="top">
 </p>
 
-This is a simple Android fitness app made with **Kotlin** for my university project.  
-The goal was to show the main Android concepts in one application.
+## About the app
+This is a simple Android fitness application developed in **Kotlin**.  
+It helps users start and track basic workouts, showing a timer, exercises, and motivational quotes.  
+The app also saves finished workouts locally and allows the user to view their workout history.
 
-## Features
-- **Two Activities**
-    - Main screen (choose workout, see a quote, view history)
-    - Workout screen (timer + exercises)
+## Main features
+- **Two Activities**  
+  The main screen lets the user choose between Cardio and Strength workouts and displays a random motivational quote.  
+  The second screen shows the workout itself with a timer and a list of exercises.
 
-- **Fragments**
-    - TimerFragment → shows a running timer
-    - ExerciseFragment → shows exercises and highlights them every 20 seconds
+- **Fragments**  
+  The timer and exercise list are separated into two fragments to organize the interface better and make the code easier to maintain.
 
-- **Service**
-    - WorkoutTimerService → runs in background and updates the timer every second
+- **Service**  
+  A background service keeps the workout timer running even if the user interacts with other parts of the app.
 
-- **API call**
-    - Gets motivational quotes from [ZenQuotes API](https://zenquotes.io/api/random)
+- **API connection**  
+  The app connects to the [ZenQuotes API](https://zenquotes.io/api/random) to display a motivational quote on the main screen.  
+  Internet access is required for this feature.
 
-- **SQLite Database**
-    - Saves finished workouts (type, duration, date)
-    - Shows workout history in a dialog
+- **SQLite database**  
+  Each finished workout is saved with its type, duration, and date.  
+  The saved sessions can be viewed later in a simple dialog window.
 
 ## How to run
-1. Open the project in **Android Studio**
-2. Connect a device or emulator
-3. Run the app
-4. The app needs internet for the quotes
+1. Open the project in **Android Studio**.
+2. Connect a real Android device or start an emulator.
+3. Press **Run** to build and install the app.
+4. Make sure the device has an internet connection so the quotes can load.
+

@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
+/**
+ * Fragment responsible for displaying and updating the workout timer.
+ */
 class TimerFragment : Fragment() {
-
     private lateinit var timerText: TextView
     private val handler = Handler(Looper.getMainLooper())
 
+
+    // Periodically updates the timer display every second
     private val updater = object : Runnable {
         override fun run() {
             if (!WorkoutState.isStopped) {

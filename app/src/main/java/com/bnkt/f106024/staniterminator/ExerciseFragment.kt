@@ -10,6 +10,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
+/**
+ * Fragment that displays the exercise list and cycles through each exercise every 30 seconds.
+ */
 class ExerciseFragment : Fragment() {
 
     private lateinit var exerciseListLayout: LinearLayout
@@ -30,6 +33,8 @@ class ExerciseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        // Load exercise list based on workout type.
         val workoutType = arguments?.getString("workout_type") ?: "Cardio"
         exercises = when (workoutType) {
             "Cardio" -> listOf("Jumping Jacks", "High Knees", "Mountain Climbers", "Burpees")
@@ -49,6 +54,7 @@ class ExerciseFragment : Fragment() {
         cycleTimer = null
     }
 
+    /** Starts a 30-second cycle that highlights exercises one by one. */
     private fun startCycling() {
         if (exercises.isEmpty()) return
         cycleTimer?.cancel()
@@ -61,6 +67,7 @@ class ExerciseFragment : Fragment() {
         }.start()
     }
 
+    /** Builds and displays the exercise list. */
     private fun buildExerciseList() {
         exerciseListLayout.removeAllViews()
         exercises.forEachIndexed { index, name ->
@@ -80,6 +87,8 @@ class ExerciseFragment : Fragment() {
             exerciseListLayout.addView(tv)
         }
     }
+
+    /** Highlights the current exercise and resets colors for others. */
     private fun highlightExercise(position: Int) {
         for (i in exercises.indices) {
             val tv = exerciseListLayout.findViewWithTag<TextView>("exercise_$i")

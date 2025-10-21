@@ -6,6 +6,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * Activity that manages the workout session.
+ * Handles timer, exercise sequence, and user actions (pause, continue, stop).
+ */
 class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var database: WorkoutDatabase
@@ -20,6 +24,7 @@ class WorkoutActivity : AppCompatActivity() {
         workoutType = intent.getStringExtra("workout_type") ?: "Cardio"
         workoutStartTime = System.currentTimeMillis()
 
+        // Load timer and exercise fragments.
         supportFragmentManager.beginTransaction()
             .replace(R.id.timer_container, TimerFragment())
             .replace(R.id.exercise_container, ExerciseFragment().apply {
@@ -27,11 +32,13 @@ class WorkoutActivity : AppCompatActivity() {
             })
             .commit()
 
+        // Start background timer service.
         startService(Intent(this, WorkoutTimerService::class.java))
 
         setupButtons()
     }
 
+    /** Initializes button actions for controlling the workout. */
     private fun setupButtons() {
         val pauseButton = findViewById<Button>(R.id.btnPause)
         val continueButton = findViewById<Button>(R.id.btnContinue)
@@ -44,6 +51,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         continueButton.setOnClickListener {
             when {
+                // Restart a stopped workout.
                 WorkoutState.isStopped -> {
                     WorkoutState.isStopped = false
                     WorkoutState.isPaused = false
@@ -57,6 +65,8 @@ class WorkoutActivity : AppCompatActivity() {
                         .commit()
                     Toast.makeText(this, "Workout started!", Toast.LENGTH_SHORT).show()
                 }
+
+                // Resume a paused workout.
                 WorkoutState.isPaused -> {
                     WorkoutState.isPaused = false
                     Toast.makeText(this, "Workout resumed", Toast.LENGTH_SHORT).show()
@@ -78,6 +88,7 @@ class WorkoutActivity : AppCompatActivity() {
         }
     }
 
+    /** Ensures workout is saved and timer service stopped when activity is destroyed. */
     override fun onDestroy() {
         super.onDestroy()
         if (!WorkoutState.isStopped) {

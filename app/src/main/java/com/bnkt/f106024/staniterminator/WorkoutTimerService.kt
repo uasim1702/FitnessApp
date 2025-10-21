@@ -4,6 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
+
+/**
+ * service that tracks workout time in the background.
+ * Updates [WorkoutState.seconds] every second while active.
+ */
 class WorkoutTimerService : Service() {
 
     private var isRunning = false
@@ -13,6 +18,7 @@ class WorkoutTimerService : Service() {
         isRunning = true
         WorkoutState.seconds = 0
 
+        // Run timer logic on a background thread.
         timerThread = Thread {
             try {
                 while (isRunning) {
@@ -23,13 +29,14 @@ class WorkoutTimerService : Service() {
                     Thread.sleep(1000)
                 }
             } catch (_: InterruptedException) {
+                // Thread interrupted when service is stopped.
             } finally {
                 stopSelf()
             }
         }
         timerThread.start()
 
-        return START_STICKY
+        return START_STICKY // If killed, recreate me
     }
 
     override fun onDestroy() {
@@ -38,5 +45,6 @@ class WorkoutTimerService : Service() {
         super.onDestroy()
     }
 
+    // No binding required; service runs independently.
     override fun onBind(intent: Intent?): IBinder? = null
 }

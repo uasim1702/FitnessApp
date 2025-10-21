@@ -7,8 +7,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * Entry activity of the app.
+ * Displays workout options, motivational quotes, and workout history.
+ */
 class MainActivity : AppCompatActivity() {
-
     private lateinit var database: WorkoutDatabase
     private lateinit var quoteService: ApiService
     private lateinit var motivationText: TextView
@@ -32,12 +35,14 @@ class MainActivity : AppCompatActivity() {
         loadMotivationalQuote()
     }
 
+    /** Launches the workout screen for the selected workout type. */
     private fun startWorkout(workoutType: String) {
         val intent = Intent(this, WorkoutActivity::class.java)
         intent.putExtra("workout_type", workoutType)
         startActivity(intent)
     }
 
+    /** Opens a dialog showing the last saved workout sessions. */
     private fun showHistory() {
         val workouts = database.getAllWorkouts()
         if (workouts.isEmpty()) {
@@ -47,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** Builds and displays the workout history dialog. */
     private fun showHistoryDialog(workouts: List<WorkoutSession>) {
         val dialog = android.app.AlertDialog.Builder(this)
         val dialogView = layoutInflater.inflate(R.layout.dialog_workout_history, null)
@@ -70,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+    /** Loads a random motivational quote from the API. */
     private fun loadMotivationalQuote() {
         motivationText.text = "Loading motivation..."
         quoteService.getRandomQuote(object : ApiService.QuoteCallback {

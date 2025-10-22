@@ -72,7 +72,7 @@ class ExerciseFragment : Fragment() {
         exerciseListLayout.removeAllViews()
         exercises.forEachIndexed { index, name ->
             val tv = TextView(requireContext()).apply {
-                text = "• $name"
+                text = " $name"
                 textSize = 18f
                 setPadding(20, 14, 20, 14)
                 setTextColor(Color.BLACK)
